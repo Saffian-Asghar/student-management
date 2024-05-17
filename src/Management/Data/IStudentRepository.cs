@@ -14,4 +14,8 @@ public interface IStudentRepository
     Task<Course> UpdateCourseAsync(Course course);
     Task<Course> DeleteCourseAsync(int courseId);
 
+    Task<List<Course>> GetStudentCoursesAsync(int studentId);
+    Task<bool> EnrollStudentCourseAsync(int studentId, int courseId);
+
+
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Management.Controllers
 {
     [ApiController]
-    [Route("api/students")]
+    [Route("api/")]
     public class MainController : Controller
     {
         private readonly IStudentRepository _studentRepository;
@@ -14,31 +14,50 @@ namespace Management.Controllers
             _studentRepository = studentRepository;
         }
 
-        [HttpGet]
+        [HttpGet("students")]
         public async Task<IActionResult> GetStudents()
         {
             var students = await _studentRepository.GetStudentsAsync();
             return Ok(students);
         }
 
-        [HttpGet("{studentId}")]
+        [HttpGet("students/{studentId}")]
         public async Task<IActionResult> GetStudent(int studentId)
         {
             var student = await _studentRepository.GetStudentAsync(studentId);
             return Ok(student);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddStudent([FromBody] Student student)
+        [HttpPost("students")]
+        public async Task<IActionResult> AddStudent([FromBody] CreateStudentDto student)
         {
-            var newStudent = await _studentRepository.AddStudentAsync(student);
-            return Ok(newStudent);
+            var newStudent = new Student
+            {
+                Id = GenerateUniqueId(),
+                Name = student.Name,
+                DateOfBirth = student.DateOfBirth,
+                Address = student.Address
+            };
+            var addedStudent = await _studentRepository.AddStudentAsync(newStudent);
+            return Ok(addedStudent);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateStudent([FromBody] Student student)
+        private int GenerateUniqueId()
         {
-            var updatedStudent = await _studentRepository.UpdateStudentAsync(student);
+            return new Random().Next(1000, 9999);
+        }
+
+        [HttpPut("students")]
+        public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDto student)
+        {
+            var updateObject = new Student
+            {
+                Name = student.Name,
+                DateOfBirth = student.DateOfBirth,
+                Address = student.Address,
+                PhoneNumber = student.PhoneNumber
+            };
+            var updatedStudent = await _studentRepository.UpdateStudentAsync(updateObject);
             return Ok(updatedStudent);
         }
 
@@ -64,16 +83,27 @@ namespace Management.Controllers
         }
 
         [HttpPost("courses")]
-        public async Task<IActionResult> AddCourse([FromBody] Course course)
+        public async Task<IActionResult> AddCourse([FromBody] CreateCourseDto course)
         {
-            var newCourse = await _studentRepository.AddCourseAsync(course);
-            return Ok(newCourse);
+            var newCourse = new Course
+            {
+                Id = GenerateUniqueId(),
+                Name = course.Name,
+                Description = course.Description,
+                Category = course.Category,
+                Instructor = course.Instructor,
+                DateCreated = course.DateCreated,
+                DateEnded = course.DateEnded
+            };
+            var result = await _studentRepository.AddCourseAsync(newCourse);
+            return Ok(result);
         }
 
         [HttpPut("courses")]
-        public async Task<IActionResult> UpdateCourse([FromBody] Course course)
+        public async Task<IActionResult> UpdateCourse([FromBody] UpdateCourseDto course)
         {
-            var updatedCourse = await _studentRepository.UpdateCourseAsync(course);
+            var courseToUpdate = await _studentRepository.GetCourseAsync(course.Id);
+            var updatedCourse = await _studentRepository.UpdateCourseAsync(courseToUpdate);
             return Ok(updatedCourse);
         }
 
@@ -83,6 +113,21 @@ namespace Management.Controllers
             var deletedCourse = await _studentRepository.DeleteCourseAsync(courseId);
             return Ok(deletedCourse);
         }
+
+        [HttpPost("enroll")]
+        public async Task<IActionResult> EnrollStudentInCourse(int studentId, int courseId)
+        {
+            await _studentRepository.EnrollStudentCourseAsync(studentId, courseId);
+            return Ok();
+        }
+
+        [HttpGet("studentcourses/{studentId}")]
+        public async Task<IActionResult> GetCoursesForStudent(int studentId)
+        {
+            var courses = await _studentRepository.GetStudentCoursesAsync(studentId);
+            return Ok(courses);
+        }
+
 
 
     }
