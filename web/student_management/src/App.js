@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { AppProvider } from './context/AppContext';
+import StudentList from './components/StudentList';
+
+const App = () => {
+    return (
+        <AppProvider>
+            <div className='container'>
+                <h1 className='mt-3'>Students</h1>
+                <h3 className='mt-3'>Student List</h3>
+                <div className='row '>
+                    <div className='col-sm'>
+                        <StudentList />
+                    </div>
+                </div>
+            </div>
+        </AppProvider>
+    );
+};
 
 export default App;
