@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  student-svc:
+    image: team/student-svc:latest
+    build:
+      context: .
+      dockerfile: src/Management/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=postgres;User Id=postgres;Password=postgrespw;Database=auctions
+    ports:
+      - 7001:80
+    depends_on:
+      - postgres
+  sample:
+    container_name: sample
+    build:
+      context: .
+      dockerfile: web/student_management/Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+volumes:
+  pgdata:
+  mongodata:
