@@ -1,6 +1,6 @@
 ﻿namespace Management;
 
-public class Course
+public class UpdateCourseDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -9,6 +9,5 @@ public class Course
     public string Instructor { get; set; }
     public DateTime DateCreated { get; set; }
     public DateTime DateEnded { get; set; }
-    public List<StudentCourse> StudentCourses { get; set; }
 
 }

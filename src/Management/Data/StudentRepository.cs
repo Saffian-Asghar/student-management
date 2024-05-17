@@ -69,4 +69,33 @@ public class StudentRepository : IStudentRepository
         return _studentManagementDbContext.SaveChangesAsync().ContinueWith(_ => course.Result);
     }
 
+    public async Task<List<Course>> GetStudentCoursesAsync(int studentId)
+    {
+        var courseIds = await _studentManagementDbContext.StudentCourses
+            .Where(sc => sc.StudentId == studentId)
+            .Select(sc => sc.CourseId)
+            .ToListAsync();
+
+        var courses = await _studentManagementDbContext.Courses
+            .Where(c => courseIds.Contains(c.Id))
+            .ToListAsync();
+
+        return courses;
+    }
+
+    public async Task<bool> EnrollStudentCourseAsync(int studentId, int courseId)
+    {
+        var studentCourse = new StudentCourse
+        {
+            StudentId = studentId,
+            CourseId = courseId
+        };
+
+        _studentManagementDbContext.StudentCourses.Add(studentCourse);
+
+        var result = await _studentManagementDbContext.SaveChangesAsync();
+
+        return result > 0;
+    }
+
 }
