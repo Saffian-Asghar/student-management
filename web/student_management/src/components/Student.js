@@ -17,7 +17,6 @@ const Student = (props) => {
                 <FaArrowAltCircleRight style={{ cursor: 'pointer' }} size='1.5em' onClick={(event) => showCourses(props.id)} />
             </td>
         </tr>
-        // onClick={}
     );
 };
 
