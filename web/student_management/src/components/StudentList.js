@@ -11,6 +11,7 @@ const StudentList = () => {
             <tr>
               <th scope="col">Student ID</th>
               <th scope="col">Name</th>
+              <th scope="col">Courses</th>
             </tr>
           </thead>
             <tbody>
