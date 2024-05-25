@@ -4,7 +4,6 @@ import { AddStudent } from './AddStudent';
 
 const StudentsPage = () => {
     const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
-    // const { new_student } = useContext(AddStudent);
 
     const handleAddStudentClose = () => {
         setIsAddStudentOpen(false);
@@ -12,11 +11,8 @@ const StudentsPage = () => {
 
     const handleStudentAdded = () => {
         setIsAddStudentOpen(false);
-        // Reload the student list
     };
 
-
-    // console.log(student_name)
     return (
         <div className="container">
             <h1 className="mt-3">Students</h1>
