@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddStudentPopup = props => {
+const AddCoursePopup = props => {
   console.log(props.content)
 
   return (
@@ -13,4 +13,4 @@ const AddStudentPopup = props => {
   );
 };
 
-export default AddStudentPopup;
+export default AddCoursePopup;

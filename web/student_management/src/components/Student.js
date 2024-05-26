@@ -6,7 +6,9 @@ const Student = (props) => {
     const navigate = useNavigate();
 
     const showCourses = (id) => {
-        navigate(id);
+        // navigate(id);
+        console.log('Navigating to student courses page with ID:', id); // Debug log
+        navigate(`/students/${id}`);
     };
 
     return (
@@ -14,7 +16,7 @@ const Student = (props) => {
             <td>{props.id}</td>
             <td>{props.name}</td>
             <td>
-                <FaArrowAltCircleRight style={{ cursor: 'pointer' }} size='1.5em' onClick={(event) => showCourses(props.id)} />
+               <FaArrowAltCircleRight style={{ cursor: 'pointer' }} size='1.5em' onClick={() => showCourses(props.id)} />
             </td>
             <td>
                 {props.children}

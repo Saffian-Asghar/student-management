@@ -76,6 +76,9 @@ namespace Management.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
+                    b.Property<StudentCourse>("StudentCourses")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Students");

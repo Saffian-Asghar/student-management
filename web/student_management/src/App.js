@@ -10,14 +10,14 @@ import {
 import { StudentsPage } from './context/AppContext';
 import StudentList from './components/StudentList';
 import { CoursesPage } from './context/AppContext';
+import StudentCoursesPage from './components/StudentCoursesPage';
 
 const App = () => {
     return (
         <Router>
             <Routes>
                 <Route
-                    exact
-                    path="/"
+                    exact path="/"
                     element={
                         <StudentsPage>
                             <div className='container'>
@@ -30,9 +30,12 @@ const App = () => {
                             </div>
                         </StudentsPage>}
                 />
-                <Route
-                        path="/:id"
-                        element={<CoursesPage />}
+                 <Route path="/courses" element={<CoursesPage />}
+                />
+                <Route 
+                path="/studentcourses/:id" 
+                        // path="/:id"
+                element={<StudentCoursesPage />}
                 />
             </Routes>
         </Router>

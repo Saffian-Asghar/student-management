@@ -36,7 +36,8 @@ namespace Management.Controllers
                 Id = GenerateUniqueId(),
                 Name = student.Name,
                 DateOfBirth = student.DateOfBirth,
-                Address = student.Address
+                Address = student.Address,
+                // StudentCourses = student.StudentCourses
             };
             var addedStudent = await _studentRepository.AddStudentAsync(newStudent);
             return Ok(addedStudent);
@@ -55,7 +56,8 @@ namespace Management.Controllers
                 Name = student.Name,
                 DateOfBirth = student.DateOfBirth,
                 Address = student.Address,
-                PhoneNumber = student.PhoneNumber
+                PhoneNumber = student.PhoneNumber,
+                // StudentCourses = student.StudentCourses
             };
             var updatedStudent = await _studentRepository.UpdateStudentAsync(updateObject);
             return Ok(updatedStudent);

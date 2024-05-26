@@ -25,7 +25,8 @@ public class DbInitializer
                 Email = "jdoe@gmail.com",
                 DateOfBirth = new DateTime(1990, 1, 1),
                 Address = "123 Elm St",
-                PhoneNumber = "123-456-7890"
+                PhoneNumber = "123-456-7890",
+                // StudentCourses = [1, 2, 3]
             },
             new Student
             {
@@ -33,7 +34,8 @@ public class DbInitializer
                 Email = "jane@gmail.com",
                 DateOfBirth = new DateTime(1991, 2, 2),
                 Address = "456 Oak St",
-                PhoneNumber = "456-789-0123"
+                PhoneNumber = "456-789-0123",
+                // StudentCourses = [10, 20, 30]
             }
         };
 
