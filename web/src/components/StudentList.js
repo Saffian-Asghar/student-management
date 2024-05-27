@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from '../api/axios';
 
-const StudentList = ({ onSelectStudent }) => {
+const StudentList = () => {
     const [students, setStudents] = useState([]);
 
     useEffect(() => {
         const fetchStudents = async () => {
-            const response = await axios.get('/students');
-            setStudents(response.data);
+            try {
+                const response = await axios.get('/students');
+                setStudents(response.data);
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
         };
 
         fetchStudents();
@@ -21,12 +26,12 @@ const StudentList = ({ onSelectStudent }) => {
                     <li
                         key={student.id}
                         className="p-2 bg-gray-100 hover:bg-gray-200 rounded cursor-pointer"
-                        onClick={() => onSelectStudent(student.id)}
                     >
-                        {student.name}
+                        <Link to={`/student/${student.id}/courses`}>{student.name}</Link>
                     </li>
                 ))}
             </ul>
+            <Link to="/add-student" className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded-lg">Add Student</Link>
         </div>
     );
 };

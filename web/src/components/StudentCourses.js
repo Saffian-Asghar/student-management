@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import axios from '../api/axios';
 
-const StudentCourses = ({ studentId }) => {
-    const [courses, setCourses] = useState([]);
+const StudentCourses = () => {
+    const { id } = useParams();
+    const [studentCourses, setStudentCourses] = useState([]);
     const [allCourses, setAllCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState('');
 
     useEffect(() => {
-        const fetchCourses = async () => {
-            const response = await axios.get(`/studentcourses/${studentId}`);
-            setCourses(response.data);
+        const fetchStudentCourses = async () => {
+            const response = await axios.get(`/studentcourses/${id}`);
+            setStudentCourses(response.data);
         };
 
         const fetchAllCourses = async () => {
@@ -17,43 +19,56 @@ const StudentCourses = ({ studentId }) => {
             setAllCourses(response.data);
         };
 
-        fetchCourses();
+        fetchStudentCourses();
         fetchAllCourses();
-    }, [studentId]);
+    }, [id]);
 
-    const handleEnroll = async () => {
-        await axios.post('/enroll', null, { params: { studentId, courseId: selectedCourse } });
-        setCourses([...courses, allCourses.find(course => course.id === parseInt(selectedCourse))]);
+    const handleEnrollCourse = async () => {
+        try {
+            await axios.post(`/enroll?studentId=${id}&courseId=${selectedCourse}`);
+            // Reload student courses after enrolling
+            const response = await axios.get(`/studentcourses/${id}`);
+            setStudentCourses(response.data);
+        } catch (error) {
+            console.error('Error enrolling in course:', error);
+        }
     };
 
+    const availableCourses = allCourses.filter(course => !studentCourses.some(sc => sc.id === course.id));
+
     return (
-        <div className="p-4 bg-white shadow-md rounded-lg mt-6">
-            <h2 className="text-2xl font-semibold mb-4">Student Courses</h2>
-            <ul className="space-y-2 mb-4">
-                {courses.map(course => (
-                    <li key={course.id} className="p-2 bg-gray-100 rounded">
-                        {course.name}
-                    </li>
+        <div className="max-w-md mx-auto p-4">
+            <h2 className="text-2xl font-bold mb-4">Student Courses</h2>
+            <ul>
+                {studentCourses.map(course => (
+                    <li key={course.id} className="mb-2">{course.name}</li>
                 ))}
             </ul>
-            <select
-                className="block w-full p-2 mb-4 border rounded"
-                value={selectedCourse}
-                onChange={e => setSelectedCourse(e.target.value)}
-            >
-                <option value="">Select a course</option>
-                {allCourses.map(course => (
-                    <option key={course.id} value={course.id}>
-                        {course.name}
-                    </option>
-                ))}
-            </select>
-            <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={handleEnroll}
-            >
-                Enroll
-            </button>
+            <div className="mt-4">
+                <h3 className="text-lg font-semibold mb-2">Enroll in a new course</h3>
+                <select
+                    value={selectedCourse}
+                    onChange={e => setSelectedCourse(e.target.value)}
+                    className="block w-full p-2 border border-gray-300 rounded-md mb-2"
+                >
+                    <option value="">Select a course</option>
+                    {availableCourses.map(course => (
+                        <option key={course.id} value={course.id}>{course.name}</option>
+                    ))}
+                </select>
+                <button
+                    onClick={handleEnrollCourse}
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md mr-2 hover:bg-blue-600"
+                >
+                    Enroll
+                </button>
+                <Link
+                    to={`/student/${id}/add-course`}
+                    className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+                >
+                    Add a new course
+                </Link>
+            </div>
         </div>
     );
 };
