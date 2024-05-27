@@ -3,8 +3,11 @@ WORKDIR /app
 
 EXPOSE 80
 
+# Copy csproj and restore as distinct layers
 COPY StudentManagement.sln StudentManagement.sln
 COPY src/Management/Management.csproj src/Management/Management.csproj
+COPY *.csproj ./
+RUN dotnet restore
 
 RUN dotnet restore StudentManagement.sln
 

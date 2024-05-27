@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres
@@ -7,19 +9,5 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-  student-svc:
-    image: team/student-svc:latest
-    build:
-      context: .
-      dockerfile: src/Management/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=postgres;User Id=postgres;Password=postgrespw;Database=auctions
-    ports:
-      - 7001:80
-    depends_on:
-      - postgres
 volumes:
   pgdata:
-  mongodata:
